@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta http-equiv="X-Content-Type-Options" content="nosniff">
+  <meta http-equiv="X-Frame-Options" content="DENY">
+  <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+  <meta http-equiv="Permissions-Policy" content="geolocation=(), microphone=(), camera=()">
+  <meta http-equiv="Content-Security-Policy" content="
+    default-src 'self';
+    script-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+    style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://fonts.gstatic.com;
+    font-src 'self' https://fonts.gstatic.com;
+    img-src 'self' data: https:;
+    connect-src 'self' https://engarde-service.com https://fie.org;
+    frame-ancestors 'none';
+    base-uri 'self';
+    form-action 'self';
+  ">
+  <meta name="description" content="Lame & Piste — L'application de référence pour l'escrime mondiale et française. Résultats en direct, classements, news, interviews et calendrier.">
+  <meta name="theme-color" content="#09090B">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Lame & Piste">
+  <meta property="og:title" content="Lame & Piste — L'escrime en direct">
+  <meta property="og:description" content="Résultats live, classements FIE, news et calendrier escrime">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="fr_FR">
+  <title>Lame & Piste — L'escrime mondiale</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════
+     SIDEBAR DESKTOP
+═══════════════════════════════════════ -->
+<aside class="sidebar" id="sidebar" role="navigation" aria-label="Navigation principale">
+  <div class="sidebar-logo">
+    <div class="logo-mark">L<span>&</span>P</div>
+    <div class="logo-text">
+      <span class="logo-main">Lame & Piste</span>
+      <span class="logo-sub">L'escrime mondiale</span>
+    </div>
+  </div>
+
+  <nav class="sidebar-nav">
+    <button class="snav-item active" data-page="home" onclick="App.navigate('home')" aria-current="page">
+      <span class="snav-icon" aria-hidden="true">⌂</span>
+      <span class="snav-label">Accueil</span>
+    </button>
+    <button class="snav-item" data-page="direct" onclick="App.navigate('direct')">
+      <span class="snav-icon" aria-hidden="true">◉</span>
+      <span class="snav-label">Direct</span>
+      <span class="live-count" id="live-count">4</span>
+    </button>
+    <button class="snav-item" data-page="classements" onclick="App.navigate('classements')">
+      <span class="snav-icon" aria-hidden="true">◈</span>
+      <span class="snav-label">Classements</span>
+    </button>
+    <button class="snav-item" data-page="news" onclick="App.navigate('news')">
+      <span class="snav-icon" aria-hidden="true">◆</span>
+      <span class="snav-label">News</span>
+    </button>
+    <button class="snav-item" data-page="competitions" onclick="App.navigate('competitions')">
+      <span class="snav-icon" aria-hidden="true">◎</span>
+      <span class="snav-label">Calendrier</span>
+    </button>
+    <button class="snav-item" data-page="athletes" onclick="App.navigate('athletes')">
+      <span class="snav-icon" aria-hidden="true">▣</span>
+      <span class="snav-label">Athlètes</span>
+    </button>
+  </nav>
+
+  <div class="sidebar-footer">
+    <div class="api-status-bar" id="api-status-bar">
+      <div class="api-dot" id="api-dot"></div>
+      <span id="api-status-label">Connexion…</span>
+    </div>
+    <div class="live-indicator" id="sidebar-update-info">
+      <span class="live-dot-anim"></span>
+      <span id="sidebar-update-time">En direct</span>
+    </div>
+    <button class="refresh-btn" id="refresh-btn" onclick="App.forceRefresh()" title="Forcer la mise à jour">
+      <span id="refresh-icon">↺</span> Actualiser
+    </button>
+    <div class="sidebar-version">v2.0.0 · Engarde + FIE</div>
+  </div>
+</aside>
+
+<!-- ═══════════════════════════════════════
+     MAIN CONTENT
+═══════════════════════════════════════ -->
+<main class="main-content" id="main-content" role="main">
+
+  <!-- TOP BAR MOBILE -->
+  <header class="topbar" id="topbar" role="banner">
+    <div class="topbar-logo">
+      <span class="topbar-title">Lame<em>&</em>Piste</span>
+    </div>
+    <div class="topbar-actions">
+      <div class="live-pill-sm">
+        <span class="live-dot-anim"></span>
+        <span id="topbar-live-count">4</span> live
+      </div>
+      <button class="topbar-refresh" onclick="App.forceRefresh()" title="Actualiser" aria-label="Actualiser les données">↺</button>
+    </div>
+  </header>
+
+  <!-- PAGES -->
+  <div class="pages-wrapper" id="pages-wrapper">
+
+    <!-- ── PAGE ACCUEIL ── -->
+    <section class="page active" id="page-home" aria-label="Accueil">
+      <div class="hero">
+        <div class="hero-bg"></div>
+        <div class="hero-grid-overlay"></div>
+        <div class="hero-glow"></div>
+        <div class="hero-content">
+          <p class="hero-tag">L'escrime au bout des doigts</p>
+          <h1 class="hero-title">LAME<em>&amp;</em><br>PISTE</h1>
+          <p class="hero-sub">Résultats · Classements · Actualités · Calendrier</p>
+          <div class="live-pill">
+            <span class="live-dot-anim"></span>
+            <span id="hero-live-count">4</span> compétitions en direct
+          </div>
+        </div>
+        <div class="hero-deco" aria-hidden="true">🤺</div>
+      </div>
+
+      <div class="home-grid">
+        <div class="home-col-main">
+          <h2 class="section-label">À la une</h2>
+          <div class="news-scroll" id="home-news-scroll"></div>
+
+          <h2 class="section-label" style="margin-top:28px">Résultat du moment</h2>
+          <div id="home-result"></div>
+        </div>
+        <div class="home-col-side">
+          <h2 class="section-label">Prochains events</h2>
+          <div id="home-calendar"></div>
+
+          <h2 class="section-label" style="margin-top:24px">Top classement</h2>
+          <div id="home-ranking"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── PAGE DIRECT ── -->
+    <section class="page" id="page-direct" aria-label="Résultats en direct">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">EN <em>DIRECT</em></h1>
+          <div class="page-meta" style="margin-top:8px">
+            <span class="live-pill-sm"><span class="live-dot-anim"></span><span id="direct-count">4</span> matchs</span>
+            <span class="update-time" id="update-time">Mis à jour il y a 0s</span>
+          </div>
+        </div>
+        <div class="source-badge" id="source-badge">
+          <span class="source-dot"></span>
+          <span id="source-label">Engarde</span>
+        </div>
+      </div>
+
+      <!-- Barre de progression du rafraîchissement -->
+      <div class="refresh-progress" id="refresh-progress">
+        <div class="refresh-bar" id="refresh-bar"></div>
+      </div>
+
+      <div id="direct-results"></div>
+    </section>
+
+    <!-- ── PAGE CLASSEMENTS ── -->
+    <section class="page" id="page-classements" aria-label="Classements">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">CLASSE<em>MENTS</em></h1>
+          <p class="page-subtitle">FIE · EFC · FFE — Mis à jour en direct</p>
+        </div>
+        <div class="source-badge">
+          <span class="source-dot"></span>
+          <span>FIE / FFE</span>
+        </div>
+      </div>
+
+      <!-- Ligue selector -->
+      <div class="league-tabs" id="league-tabs">
+        <button class="ltab active" data-league="world" onclick="App.switchLeague('world')">
+          <span class="ltab-icon">🌍</span>
+          <span>Mondial FIE</span>
+        </button>
+        <button class="ltab" data-league="europe" onclick="App.switchLeague('europe')">
+          <span class="ltab-icon">🇪🇺</span>
+          <span>Européen EFC</span>
+        </button>
+        <button class="ltab" data-league="france" onclick="App.switchLeague('france')">
+          <span class="ltab-icon">🇫🇷</span>
+          <span>France FFE</span>
+        </button>
+      </div>
+
+      <!-- Genre -->
+      <div class="gender-toggle" id="rank-gender-cls">
+        <button class="gtbtn active" data-gender="men">Hommes</button>
+        <button class="gtbtn" data-gender="women">Femmes</button>
+      </div>
+
+      <!-- Armes -->
+      <div class="filter-row" id="rank-weapon-cls">
+        <button class="fbtn active" data-weapon="foil">⚔ Fleuret</button>
+        <button class="fbtn" data-weapon="epee">🗡 Épée</button>
+        <button class="fbtn" data-weapon="sabre">🔱 Sabre</button>
+      </div>
+
+      <!-- Tableau classement -->
+      <div id="classements-table"></div>
+
+      <!-- Note source -->
+      <div class="source-note" id="classements-source-note"></div>
+    </section>
+
+    <!-- ── PAGE NEWS ── -->
+    <section class="page" id="page-news" aria-label="Actualités">
+      <div class="page-header">
+        <h1 class="page-title">ACTU<em>ALITÉS</em></h1>
+        <p class="page-subtitle">News · Interviews · Vidéos</p>
+      </div>
+      <div class="filter-row" id="news-filters">
+        <button class="fbtn active" data-filter="all">Tout</button>
+        <button class="fbtn" data-filter="news">News</button>
+        <button class="fbtn" data-filter="interview">Interviews</button>
+        <button class="fbtn" data-filter="video">Vidéos</button>
+        <button class="fbtn" data-filter="ffe">🇫🇷 FFE</button>
+      </div>
+
+      <h2 class="section-label" style="padding:0 40px">Interviews vidéo</h2>
+      <div class="hscroll" id="news-videos"></div>
+
+      <h2 class="section-label" style="padding:0 40px;margin-top:28px">Dernières nouvelles</h2>
+      <div id="news-articles"></div>
+    </section>
+
+    <!-- ── PAGE COMPÉTITIONS / CALENDRIER ── -->
+    <section class="page" id="page-competitions" aria-label="Calendrier des compétitions">
+      <div class="page-header">
+        <h1 class="page-title">CALEN<em>DRIER</em></h1>
+        <p class="page-subtitle">Compétitions à venir</p>
+      </div>
+
+      <div class="filter-row" id="cal-filters">
+        <button class="fbtn active" data-filter="all">Tout</button>
+        <button class="fbtn" data-filter="world">Chpt Monde</button>
+        <button class="fbtn" data-filter="europe">Européen</button>
+        <button class="fbtn" data-filter="asia">Asie</button>
+        <button class="fbtn" data-filter="north-america">Amériques N.</button>
+        <button class="fbtn" data-filter="south-america">Amériques S.</button>
+        <button class="fbtn" data-filter="mena">MENA</button>
+        <button class="fbtn" data-filter="france">🇫🇷 France</button>
+      </div>
+      <div id="cal-events"></div>
+    </section>
+
+    <!-- ── PAGE ATHLÈTES ── -->
+    <section class="page" id="page-athletes" aria-label="Athlètes">
+      <div class="page-header">
+        <h1 class="page-title">ATH<em>LÈTES</em></h1>
+        <p class="page-subtitle">Stats & Profils</p>
+      </div>
+      <div class="search-bar" role="search">
+        <span class="search-icon" aria-hidden="true">⌕</span>
+        <input
+          type="search"
+          id="athlete-search"
+          placeholder="Rechercher un escrimeur…"
+          autocomplete="off"
+          spellcheck="false"
+          maxlength="60"
+          aria-label="Rechercher un athlète"
+        >
+        <button class="search-clear" id="search-clear" aria-label="Effacer la recherche" style="display:none">✕</button>
+      </div>
+      <div class="filter-row" id="athlete-filters">
+        <button class="fbtn active" data-filter="all">Tous</button>
+        <button class="fbtn" data-filter="foil">Fleuret</button>
+        <button class="fbtn" data-filter="epee">Épée</button>
+        <button class="fbtn" data-filter="sabre">Sabre</button>
+        <button class="fbtn" data-filter="france">🇫🇷 France</button>
+      </div>
+      <div id="athletes-grid"></div>
+    </section>
+
+  </div><!-- pages-wrapper -->
+</main>
+
+<!-- ═══════════════════════════════════════
+     BOTTOM NAV MOBILE
+═══════════════════════════════════════ -->
+<nav class="bottom-nav" id="bottom-nav" role="navigation" aria-label="Navigation mobile">
+  <button class="bnav-item active" data-page="home" onclick="App.navigate('home')" aria-label="Accueil">
+    <span class="bnav-icon" aria-hidden="true">⌂</span>
+    <span class="bnav-label">Accueil</span>
+  </button>
+  <button class="bnav-item" data-page="direct" onclick="App.navigate('direct')" aria-label="Direct">
+    <span class="bnav-icon" aria-hidden="true">◉</span>
+    <span class="bnav-label">Direct</span>
+    <span class="bnav-badge" id="bnav-badge">4</span>
+  </button>
+  <button class="bnav-item" data-page="classements" onclick="App.navigate('classements')" aria-label="Classements">
+    <span class="bnav-icon" aria-hidden="true">◈</span>
+    <span class="bnav-label">Classements</span>
+  </button>
+  <button class="bnav-item" data-page="news" onclick="App.navigate('news')" aria-label="News">
+    <span class="bnav-icon" aria-hidden="true">◆</span>
+    <span class="bnav-label">News</span>
+  </button>
+  <button class="bnav-item" data-page="competitions" onclick="App.navigate('competitions')" aria-label="Calendrier">
+    <span class="bnav-icon" aria-hidden="true">◎</span>
+    <span class="bnav-label">Calendrier</span>
+  </button>
+</nav>
+
+<script src="js/data.js"></script>
+<script src="js/security.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
