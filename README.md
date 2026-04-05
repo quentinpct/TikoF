@@ -4,17 +4,17 @@ Application web responsive (mobile + desktop) dédiée à l'escrime mondiale et 
 
 ## Structure
 
-TikoF/
-├── index.html          # Point d'entrée + headers sécurité
-├── css/
-│   ├── main.css        # Variables, reset, layout, hero
-│   ├── components.css  # Cartes, résultats, classements, athlètes
-│   └── responsive.css  # Mobile, tablet, desktop, safe areas
-├── js/
-│   ├── security.js     # Module sécurité (XSS, sanitization, rate limiting)
-│   ├── data.js         # Données (à connecter aux APIs)
-│   └── app.js          # Logique application
-└── README.md
+TikoF/    \n
+├── index.html          # Point d'entrée + headers sécurité\n
+├── css/\n
+│   ├── main.css        # Variables, reset, layout, hero\n
+│   ├── components.css  # Cartes, résultats, classements, athlètes\n
+│   └── responsive.css  # Mobile, tablet, desktop, safe areas\n
+├── js/\n
+│   ├── security.js     # Module sécurité (XSS, sanitization, rate limiting)\n
+│   ├── data.js         # Données (à connecter aux APIs)\n
+│   └── app.js          # Logique application\n
+└── README.md\n
 
 ## Fonctionnalités
 
